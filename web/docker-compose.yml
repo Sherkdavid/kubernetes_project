@@ -1,0 +1,19 @@
+version: '2'
+services:
+ stream:
+  build: ./stream
+ rabbitmq:
+  image: "rabbitmq:alpine"
+  ports:
+   - "5672:5672"
+ analysis:
+  build: ./process
+ web:
+  build: ./web
+  ports:
+   - 5000:5000
+ redis:
+  image: "redis:alpine"
+  ports:
+   - 6379:6379
+
