@@ -65,7 +65,7 @@ if __name__ == "__main__":
         try:
             connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
             channel = connection.channel(0)
-            channel.queue_declare(queue='tweet_stack')
+            channel.queue_declare(queue='jobq')
             waiting = False
         except:
             #try again in 0.5 seconds

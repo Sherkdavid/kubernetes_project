@@ -36,6 +36,6 @@ if __name__ == "__main__":
             waiting = False
         except:
             time.sleep(0.5)
-    channel.queue_declare(queue='tweet_stack')
-    channel.basic_consume(callback, queue='tweet_stack', no_ack=True)
+    channel.queue_declare(queue='jobq')
+    channel.basic_consume(callback, queue='jobq', no_ack=True)
     channel.start_consuming()
