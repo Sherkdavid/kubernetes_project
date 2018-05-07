@@ -10,32 +10,12 @@ def callback(ch,method,properties,body):
         item = eval(body)
         blob = TextBlob(item[1])
         #0's have a pretty massive effect on polarity
-        if db.get(item[0])!= None:
-            entry = eval(db.get(item[0]))
-            entry['hits'] = (entry['hits']+1)
-            entry['polarity'] = (entry['polarity'] +blob.polarity)
-            db.set(item[0], entry)
-        else:
-            db.set(item[0], {'hits': 1,'polarity' : blob.polarity})
+        db.lpush(item[0],(time.time(), blob.polarity))
 
 if __name__ == "__main__":
-    waiting = True
-
-    while waiting:
-        try:
-            connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
-            channel = connection.channel(0)
-            waiting = False
-        except:
-            time.sleep(0.5)
-    waiting = True
-    while waiting:
-        try:
-            db = redis.Redis("redis")
-            db.flushdb()
-            waiting = False
-        except:
-            time.sleep(0.5)
+    connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+    channel = connection.channel(0)
+    db = redis.Redis("redis")
     channel.queue_declare(queue='jobq')
     channel.basic_consume(callback, queue='jobq', no_ack=True)
     channel.start_consuming()

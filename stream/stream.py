@@ -28,7 +28,7 @@ class MyStreamListener(tweepy.StreamListener):
             else:
                 tweet = clean_tweet(tweet['text'])
             channel.basic_publish(exchange='',
-                              routing_key='tweet_stack',
+                              routing_key='jobq',
                               body="('twitter' , '"+tweet+"')")
 
 def clean_tweet(tweet):
