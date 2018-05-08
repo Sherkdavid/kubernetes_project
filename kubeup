@@ -1,0 +1,3 @@
+eval $(minikube docker-env)
+kubectl create -f ./kube-config/ --validate=false
+kubectl port-forward svc/web 5000:5000

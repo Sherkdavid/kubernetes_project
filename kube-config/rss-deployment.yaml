@@ -1,20 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: rabbitmq
+ name: rss
 spec:
  selector:
   matchLabels:
-   app: rabbitmq
+   app: rss
  template:
   metadata: 
    labels:
-    app: rabbitmq
+    app: rss
   spec:
    containers:
-    - name: rabbitmq
-      image: rabbitmq:alpine
+    - name: rss
+      image: rss
       imagePullPolicy: IfNotPresent
       restartPolicy: Always
-      ports:
-       - containerPort: 5672

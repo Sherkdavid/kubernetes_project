@@ -1,20 +1,18 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: rabbitmq
+ name: twitter
 spec:
  selector:
   matchLabels:
-   app: rabbitmq
+   app: twitter
  template:
   metadata: 
    labels:
-    app: rabbitmq
+    app: twitter
   spec:
    containers:
-    - name: rabbitmq
-      image: rabbitmq:alpine
+    - name: twitter
+      image: twitter
       imagePullPolicy: IfNotPresent
       restartPolicy: Always
-      ports:
-       - containerPort: 5672

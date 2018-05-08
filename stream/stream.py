@@ -29,7 +29,7 @@ class MyStreamListener(tweepy.StreamListener):
                 tweet = clean_tweet(tweet['text'])
             channel.basic_publish(exchange='',
                               routing_key='jobq',
-                              body="('twitter' , '"+tweet+"')")
+                              body="('twitter' , '"+tweet.replace("'","")+"')")
 
 def clean_tweet(tweet):
     '''
@@ -57,30 +57,9 @@ def start_stream():
     stream.filter(track=track,async=True)
 
 if __name__ == "__main__":
-    #Have to wait for rabbitmq and redis to launch before we start operation
-    waiting = True
-
-    #wait for rabbitmq
-    while waiting:
-        try:
-            connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
-            channel = connection.channel(0)
-            channel.queue_declare(queue='jobq')
-            waiting = False
-        except:
-            #try again in 0.5 seconds
-            time.sleep(0.5)
-    waiting = True
-
-    #wait for redis
-    while waiting:
-        try:
-            db = redis.Redis('redis')
-            waiting = False
-        except:
-            #try again in 0.5 seconds
-            time.sleep(0.5)
-
+    connection = pika.BlockingConnection(pika.ConnectionParameters("rabbitmq"))
+    channel = connection.channel(0)
+    channel.queue_declare(queue='jobq')
     #start
     api = tweepy.API(auth())
     listener = MyStreamListener(api=api)

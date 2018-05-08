@@ -1,3 +1,4 @@
+import re
 import time
 import feedparser
 import pika
@@ -5,14 +6,19 @@ import pika
 def publish(x):
     channel.basic_publish(exchange='',
                           routing_key='jobq',
-                          body="('rss' , '" + x + "')")
+                          body="('rss' , '" + clean_up(x) + "')")
 
+def clean_up(tweet):
+    '''
+    Borrowed regular expression
+    '''
+    return ''.join(re.sub("(@[A-Za-z0-9]+)|([^0-9A-Za-z \t])|(\w+:\/\/\S+)", " ", tweet).split())
 
 #refresh every x minutes
 refresh_time = 10*60
 verbose = True
 if __name__ == '__main__':
-    connection = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
+    connection = pika.BlockingConnection(pika.ConnectionParameters("rabbitmq"))
     channel = connection.channel(0)
     channel.queue_declare(queue='jobq')
     bbc_wn_url = "http://feeds.bbci.co.uk/news/world/rss.xml"

@@ -1,20 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
- name: rabbitmq
+ name: analysis
 spec:
+ replicas: 1
  selector:
   matchLabels:
-   app: rabbitmq
+   app: analysis
  template:
   metadata: 
    labels:
-    app: rabbitmq
+    app: analysis
   spec:
    containers:
-    - name: rabbitmq
-      image: rabbitmq:alpine
+    - name: analysis
+      image: process
       imagePullPolicy: IfNotPresent
       restartPolicy: Always
-      ports:
-       - containerPort: 5672
