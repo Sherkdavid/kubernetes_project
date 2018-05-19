@@ -1,4 +1,6 @@
+eval $(minikube docker-env)
 docker build -t rss rss/
 docker build -t process process/
 docker build -t twitter stream/
 docker build -t web web/
+docker build -t dbpoi dbpoi/

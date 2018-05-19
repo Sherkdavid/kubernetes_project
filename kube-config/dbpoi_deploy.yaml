@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+ name: dbpoi
+spec:
+ replicas: 1
+ selector:
+  matchLabels:
+   app: dbpoi
+ template:
+  metadata: 
+   labels:
+    app: dbpoi
+  spec:
+   containers:
+    - name: dbpoi
+      image: dbpoi
+      imagePullPolicy: IfNotPresent
+      restartPolicy: Always
